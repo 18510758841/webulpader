@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<link rel="stylesheet" href="dist/webuploader.css" />
+
+	<body>
+		<div id="uploader-demo">
+			<!--用来存放item-->
+			<div id="fileList" class="uploader-list"></div>
+			<div id="filePicker">选择图片</div>
+		</div>
+
+	</body>
+
+</html>
+<script src="dist/jquery.min.js"></script>
+<script src="dist/webuploader.min.js"></script>
+<script>
+	// 图片上传demo
+	jQuery(function() {
+		var $ = jQuery,
+			$list = $('#fileList'),
+			// 优化retina, 在retina下这个值是1
+			ratio = window.devicePixelRatio || 1,
+
+			// 缩略图大小
+			thumbnailWidth =100* ratio, //设置图片宽
+			thumbnailHeight = 100 * ratio, //设置图片高
+
+			// Web Uploader实例
+			uploader;
+
+		// 初始化Web Uploader
+		uploader = WebUploader.create({
+
+			// swf文件路径
+			swf: 'dist/Uploader.swf',
+
+			// 文件接收服务端。
+			server: 'server/fileupload.php',
+			
+			// 开起分片上传。
+  		   chunked: true, //[默认值：false] 是否要分片处理大文件上传。
+  		   
+  		   chunkSize:5242880,//[默认值：5242880] 如果要分片，分多大一片？ 默认大小为5M.
+
+			// 选择文件的按钮。可选。
+			// 内部根据当前运行是创建，可能是input元素，也可能是flash.
+			pick: '#filePicker',
+			
+			duplicate :true, 
+			//duplicate属性，是可选的，  true为可重复   ，false为不可重复   默认为undifind  也是不可重复。
+
+			auto: true, //设置为 true 后，不需要手动调用上传，有文件选择即开始上传。
+
+		/*	thumb: { //配置生成缩略图的选项。
+				width: 50,
+				height: 50,
+
+				// 图片质量，只有type为`image/jpeg`的时候才有效。
+				quality: 100,
+
+				// 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+				allowMagnify: false,
+
+				// 是否允许裁剪。
+				crop: true,
+
+				// 为空的话则保留原有图片格式。
+				// 否则强制转换成指定的类型。
+				type: 'image/jpeg'
+			},*/
+			/*compress: {
+				//配置压缩的图片的选项。如果此选项为false, 则图片在上传前不进行压缩。默认为：
+				width: 1600,
+				height: 1600,
+
+				// 图片质量，只有type为`image/jpeg`的时候才有效。
+				quality: 90,
+
+				// 是否允许放大，如果想要生成小图的时候不失真，此选项应该设置为false.
+				allowMagnify: false,
+
+				// 是否允许裁剪。
+				crop: false,
+
+				// 是否保留头部meta信息。
+				preserveHeaders: true,
+
+				// 如果发现压缩后文件大小比原来还大，则使用原来图片
+				// 此属性可能会影响图片自动纠正功能
+				noCompressIfLarger: false,
+
+				// 单位字节，如果图片大小小于此值，不会采用压缩。
+				compressSize: 0
+			},*/
+
+			// 只允许选择文件，可选。
+		/*	accept: {
+				title: 'Images',
+				extensions: 'gif,jpg,jpeg,bmp,png',
+				mimeTypes: 'image/*'
+			}*/ //图片点击出现bug点击时间延长，我去博客园看‘亮蒋’写下面这段代码
+			accept: {
+				title: 'Images',
+				extensions: 'jpg,jpeg,png',
+				mimeTypes: 'image/jpg,image/jpeg,image/png' //修改这行
+			}
+		});
+
+		// 当有文件添加进来的时候
+		uploader.on('fileQueued', function(file) {
+			var $li = $(
+					'<div id="' + file.id + '" class="file-item thumbnail">' +
+					'<img>' +
+					'<div class="info">' + file.name + '</div>' +
+					'</div>'
+				),
+				$img = $li.find('img');
+
+			$list.append($li);
+
+			// 创建缩略图
+			uploader.makeThumb(file, function(error, src) {
+				if(error) {
+					$img.replaceWith('<span>不能预览</span>');
+					return;
+				}
+
+				$img.attr('src', src);
+			}, thumbnailWidth, thumbnailHeight);
+		});
+
+		// 文件上传过程中创建进度条实时显示。
+		uploader.on('uploadProgress', function(file, percentage) {
+			var $li = $('#' + file.id),
+				$percent = $li.find('.progress span');
+
+			// 避免重复创建
+			if(!$percent.length) {
+				$percent = $('<p class="progress"><span></span></p>')
+					.appendTo($li)
+					.find('span');
+			}
+
+			$percent.css('width', percentage * 100 + '%');
+		});
+
+		// 文件上传成功，给item添加成功class, 用样式标记上传成功。
+		uploader.on('uploadSuccess', function(file) {
+			$('#' + file.id).addClass('upload-state-done');
+		});
+
+		// 文件上传失败，现实上传出错。
+		uploader.on('uploadError', function(file) {
+			var $li = $('#' + file.id),
+				$error = $li.find('div.error');
+
+			// 避免重复创建
+			if(!$error.length) {
+				$error = $('<div class="error"></div>').appendTo($li);
+			}
+
+			$error.text('上传失败');
+		});
+
+		// 完成上传完了，成功或者失败，先删除进度条。
+		uploader.on('uploadComplete', function(file) {
+			$('#' + file.id).find('.progress').remove();
+		});
+	});
+</script>

@@ -1,0 +1,19 @@
+马高红	css布局	http://zh.learnlayout.com/	css布局学习
+白一冰	居中	详细请看居中文档.txt	
+韩彦斌	Echarts(统计表)	http://echarts.baidu.com/	商业级数据图表
+张卫东	日历	https://demo.mobiscroll.com/v2/jquery/calendar/	jQuery日期插件
+高慧萍	php验证码	http://www.ihuyi.com/product.php 	手机短信验证码接口
+朱丹阳	动画	详细请看loaders-demo文档	
+康雪婷	马克鳗	http://www.getmarkman.com/	设计稿标注、测量
+赵芳芳	xmind	http://www.xmindchina.net/	商业思维导图软件
+胡泽宇	map(百度地图)	http://lbsyun.baidu.com/index.php?title=jspopular	构建功能丰富、交互性强的地图应用，支持PC端和移动端
+王扬	fullpage	http://www.dowebok.com/77.html 	jQuery全屏滚动插件
+王扬	swiper3.0	http://www.swiper.com.cn/	开源、免费、强大的移动端触摸滑动插件
+阮欣	IFrame	http://www.cnblogs.com/zfc2201/archive/2012/08/23/2653346.html	浮动框架
+贺燕珍	EASYUI	http://www.jeasyui.net/	easyui是一种基于jQuery的用户界面插件集合。
+李娜	WEUI	"WEUI
+weui的github地址:
+https://github.com/weui/weui
+weui文档：
+https://github.com/weui/weui/wiki  
+http://jqweui.com/"	WeUI 是一套同微信原生视觉体验一致的基础样式库
